@@ -1,15 +1,9 @@
 # Javascript
-## Como rodar os testes
 
-No terminal, execute os comandos:
+## Para rodar a resposta
 
-```bash
-cd javascript
-yarn
-yarn test
-```
 
-Ou usando o NPM:
+Comandos NPM:
 
 ```bash
 cd javascript

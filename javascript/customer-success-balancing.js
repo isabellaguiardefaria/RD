@@ -4,18 +4,53 @@
  * @param {array} customers
  * @param {array} customerSuccessAway
  */
-function customerSuccessBalancing(
-  customerSuccess,
-  customers,
-  customerSuccessAway
-) {
+function customerSuccessBalancing( customerSuccess, customers, customerSuccessAway) 
+{
   /**
    * ===============================================
    * =========== Write your solution here ==========
    * ===============================================
    */
-   
 
+  // Verificar quais CSs estao disponíveis a partir da remocao dos que estão indisponíveis
+  const availableCS = customerSuccess.filter(cs => !customerSuccessAway.includes(cs.id));
+  
+  // Apos verificar quais CSs estao disponiveis, ordena-se os CSs disponíveis por nível em ordem crescente
+  availableCS.sort((a, b) => a.score - b.score);
+  
+  // Ordenacao dos clientes por tamanho em ordem crescente
+  customers.sort((a, b) => a.score - b.score);
+  
+  // Inicializar a contagem de clientes atendidos por cada CS
+  const clientsByCS = new Map();
+  
+  // Iterar sobre cada cliente e atribuí-los ao CS disponível de acordo com o exemplo apresentado: 1 - 20, 30, 35, 40 para o CS de nível 50; 2 - 60 e 80 para o CS de nível 100
+  for (const customer of customers) {
+    for (const cs of availableCS) {
+      if (cs.score >= customer.score) {
+        clientsByCS.set(cs.id, (clientsByCS.get(cs.id) || 0) + 1);
+        break;
+      }
+    }
+  }
+  
+  // Buscando o CS que atende o maior número de clientes
+  let maxClients = 0;
+  let resultCS = 0;
+  let isTie = false;
+  
+  clientsByCS.forEach((clients, csId) => {
+    if (clients > maxClients) {
+      maxClients = clients;
+      resultCS = csId;
+      isTie = false;
+    } else if (clients === maxClients) {
+      isTie = true;
+    }
+  });
+  
+  // Retorno do resultado: id do CS com mais clientes ou 0 em caso de empate 
+  return isTie ? 0 : resultCS;
 }
 
 test("Scenario 1", () => {
